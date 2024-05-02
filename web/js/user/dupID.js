@@ -4,7 +4,7 @@ window.onload=function() {
         const err_msg = document.getElementById('error_msg');
 
         err_msg.innerHTML = '';
-        fetch("dupidcheck?checkID="+checkID
+        fetch("dupidcheck.va?checkID="+checkID
         ,{
             method: 'GET'
             , headers: {

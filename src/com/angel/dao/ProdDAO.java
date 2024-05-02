@@ -152,24 +152,23 @@ public class ProdDAO {
     }
 // 판매자의 다른 상품 조회
     public List<ProdDTO> sellerProd(Connection conn, int sellerNo, String from) throws SQLException{
-        StringBuilder sql =new StringBuilder();
-            sql.append("  select  p.productNo     ");
-            sql.append("         ,p.productName   ");
-            sql.append("   ,i.imagePath            ");
-            sql.append("  from  images   i   inner join ");
-            sql.append("  products  p                  ");
-            sql.append("   on  i.productNo  = p.productNo ");
-            sql.append("  where  p.sellerNo   =  ?        ");
+        StringBuilder sql = new StringBuilder();
+            sql.append(" SELECT p.productNo AS productNo       ");
+            sql.append("        ,p.productName AS productName  ");
+            sql.append("        ,i.imagePath AS imagePath      ");
+            sql.append(" FROM images i INNER JOIN products p   ");
+            sql.append("   ON i.productNo = p.productNo        ");
+            sql.append(" WHERE p.sellerNo   =  ?               ");
         if("myPastSell".equals(from)) {
-            sql.append("    and  p.productNo in ( select productNo ");
-            sql.append("                              from orders ) ");
+            sql.append("   AND p.productNo IN ( SELECT productNo   ");
+            sql.append("                          FROM orders    ) ");
         } else {
-            sql.append("    and  p.productNo not in ( select productNo ");
-            sql.append("                              from orders ) ");
+            sql.append("   AND p.productNo NOT IN ( SELECT productNo   ");
+            sql.append("                              FROM orders    ) ");
         }
-            sql.append("  order by p.registerDate desc, productNo desc ");
+            sql.append(" ORDER BY p.registerDate DESC, productNo DESC ");
         if(!"my".contains(from))
-            sql.append("  limit  2");
+            sql.append(" LIMIT 2 ");
         ResultSet rs = null;
         List<ProdDTO> sellerprod = new ArrayList<>();
         try(PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {

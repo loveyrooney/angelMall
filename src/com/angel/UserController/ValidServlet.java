@@ -10,8 +10,8 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name="ValidationCheck", value="/dupidcheck")
-public class ValidAction extends HttpServlet {
+@WebServlet(name="ValidationCheck", value="/dupidcheck.va")
+public class ValidServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doReq(req, resp);
