@@ -8,12 +8,11 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/chat.ch")
 public class ChatServer {
-    private static Map<Session,String> sessions = Collections.synchronizedMap(new HashMap<>());
-
-    private RoomDTO roomInfo;
+    private static ConcurrentHashMap<Session,String> sessions = new ConcurrentHashMap<>();
     private ChatDTO message = new ChatDTO();
     @OnOpen
     public void onOpen(Session session) {
@@ -23,18 +22,19 @@ public class ChatServer {
         }
     }
 
-    private String[] metaRegister(ChatService service, String msg, Session session){
+    private String[] metaRegister(String msg, Session session){
+        // msg = "init_conn&sessionId:rno&productNo:buyerNo" 형식으로 들어온다.
+        System.out.println(msg);
         String user = msg.split("&")[1];
         String rno = user.split(":")[1];
+        String meta = msg.split("&")[2];
         sessions.put(session, user);
-        roomInfo = service.findRoomInfo(Integer.parseInt(rno));
         String[] socketId = {user.split(":")[0],rno};
-        message.setProductNo(roomInfo.getProductNo());
-        message.setBuyerNo(roomInfo.getBuyerNo());
+        message.setProductNo(Integer.parseInt(meta.split(":")[0]));
+        message.setBuyerNo(Integer.parseInt(meta.split(":")[1]));
         message.setWriter(socketId[0]);
-        System.out.println("metaset: "+ sessions.get(session));
-        System.out.println("rinfoset: "+roomInfo.getRoomNo()+roomInfo.getProductNo()+roomInfo.getBuyerNo());
-        System.out.println("msgset: "+message.getProductNo()+message.getBuyerNo()+message.getWriter());
+        System.out.println("mapset: "+ sessions.get(session));
+        System.out.println("msgset: "+message.getProductNo()+","+message.getBuyerNo()+","+message.getWriter());
         return socketId;
     }
 
@@ -42,8 +42,7 @@ public class ChatServer {
     public void onMessage(String msg, Session session) {
         ChatService service = ChatService.getChatService();
         if(msg.contains("init_conn")){
-            System.out.println(msg);
-            String[] socketId = metaRegister(service,msg,session);
+            String[] socketId = metaRegister(msg,session);
             for (Session s : sessions.keySet()) {
                 if(socketId[1].equals(sessions.get(s).split(":")[1])){
                     try{

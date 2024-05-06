@@ -164,19 +164,4 @@ public class ChatService {
         return list;
     }
 
-    public RoomDTO findRoomInfo(int rno) {
-        DBConnection db = DBConnection.getDbConn();
-        Connection conn = null;
-        ChatDAO dao = ChatDAO.getChatDAO();
-        RoomDTO roominfo = new RoomDTO();
-        try{
-            conn = db.getConnection();
-            roominfo = dao.findRoomInfo(conn,rno);
-        }catch (SQLException|NamingException e){
-            System.out.println(e.getMessage());
-        }finally {
-            if(conn!=null)try{conn.close();}catch (Exception e){}
-        }
-        return roominfo;
-    }
 }

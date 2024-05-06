@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,9 +21,9 @@
 </head>
 <body>
 <div id="wrap" class="poor-story-regular">
-    <haeder id="header">
+    <header id="header">
         <jsp:include page="header.jsp"/>
-    </haeder>
+    </header>
     <section id="jsp_body">
         <jsp:include page="${param.page}"/>
     </section>

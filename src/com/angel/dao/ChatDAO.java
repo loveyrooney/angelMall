@@ -1,7 +1,6 @@
 package com.angel.dao;
 
 import com.angel.dto.ChatDTO;
-import com.angel.dto.ChatListDTO;
 import com.angel.dto.RoomDTO;
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatDAO {
-    private static ChatDAO chatDAO = new ChatDAO();
+    private static final ChatDAO chatDAO = new ChatDAO();
     private ChatDAO(){}
 
     public static ChatDAO getChatDAO() {
@@ -226,26 +225,4 @@ public class ChatDAO {
         return list;
     }
 
-    public RoomDTO findRoomInfo(Connection conn, int rno) throws SQLException {
-        StringBuilder sql = new StringBuilder();
-        sql.append(" SELECT roomNo      ");
-        sql.append("        ,productNo  ");
-        sql.append("        ,buyerNo    ");
-        sql.append(" FROM chatroom      ");
-        sql.append(" WHERE roomNo = ?   ");
-        ResultSet rs = null;
-        RoomDTO dto = new RoomDTO();
-        try(PreparedStatement pstmt = conn.prepareStatement(sql.toString())){
-            pstmt.setInt(1,rno);
-            rs = pstmt.executeQuery();
-            while(rs.next()){
-                dto.setRoomNo(rs.getInt("roomNo"));
-                dto.setProductNo(rs.getInt("productNo"));
-                dto.setBuyerNo(rs.getInt("buyerNo"));
-            }
-        }finally {
-            if(rs!=null)try{rs.close();}catch (Exception e){}
-        }
-        return dto;
-    }
 }

@@ -46,7 +46,7 @@ window.onload = function () {
                         }
                     });
             }).then(()=>{
-                webSocket.send("init_conn&"+sessionId+":"+roomNo);
+                webSocket.send("init_conn&"+sessionId+":"+roomNo+"&"+productNo+":"+buyerNo);
             }).catch(error=>{
             console.log("error: ",error);
         });
@@ -104,11 +104,14 @@ window.onload = function () {
         }
     };
     // 거래확정 버튼 누르면 한번 더 알림
-    document.getElementById("contract").onclick=function () {
-        if (window.confirm("현재 구매자와 거래를 확정하시겠습니까? 거래는 취소할 수 없습니다.")) {
-            window.open("contract.do?productNo="+productNo+"&buyerNo="+buyerNo);
+    if(document.getElementById("contract")){
+        document.getElementById("contract").onclick=function () {
+            if (window.confirm("현재 구매자와 거래를 확정하시겠습니까? 거래는 취소할 수 없습니다.")) {
+                window.open("contract.do?productNo="+productNo+"&buyerNo="+buyerNo);
+            }
         }
     }
+
 }
 
 
